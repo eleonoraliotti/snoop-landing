@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snoop — Sappiamo già chi sarà il tuo prossimo cliente.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #181818;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #f0ede8;
+    --text-muted: rgba(240,237,232,0.45);
+    --text-mid: rgba(240,237,232,0.7);
+    --accent: #e8ff5a;
+    --accent-dark: #c8df3a;
+    --accent-glow: rgba(232,255,90,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s, background .3s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(12px);
+    border-color: var(--border);
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -.5px;
+  }
+  .logo span { color: var(--accent); }
+  .nav-cta {
+    background: var(--accent);
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    transition: background .2s, transform .15s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,255,90,0.07) 0%, transparent 70%);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 16px 6px 8px;
+    font-size: 13px;
+    color: var(--text-mid);
+    margin-bottom: 36px;
+    animation: fadeUp .6s ease both;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(.7); }
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: clamp(42px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -2px;
+    max-width: 900px;
+    margin-bottom: 28px;
+    animation: fadeUp .6s .1s ease both;
+  }
+  .hero-title .accent { color: var(--accent); }
+
+  .hero-sub {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-mid);
+    max-width: 520px;
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 48px;
+    animation: fadeUp .6s .2s ease both;
+  }
+
+  /* EMAIL FORM */
+  .email-form {
+    display: flex; gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 6px 6px 6px 20px;
+    width: 100%; max-width: 460px;
+    animation: fadeUp .6s .3s ease both;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .email-form:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  .email-form input {
+    flex: 1;
+    background: transparent;
+    border: none; outline: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    min-width: 0;
+  }
+  .email-form input::placeholder { color: var(--text-muted); }
+  .email-form button {
+    background: var(--accent);
+    color: #0a0a0a;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 12px 24px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .2s, transform .15s;
+    flex-shrink: 0;
+  }
+  .email-form button:hover { background: var(--accent-dark); transform: scale(1.02); }
+
+  .form-note {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 14px;
+    animation: fadeUp .6s .4s ease both;
+  }
+
+  /* SUCCESS STATE */
+  .success-msg {
+    display: none;
+    align-items: center; gap: 10px;
+    background: rgba(232,255,90,0.08);
+    border: 1px solid rgba(232,255,90,0.3);
+    border-radius: 100px;
+    padding: 14px 24px;
+    font-size: 15px;
+    color: var(--accent);
+    font-weight: 500;
+    animation: fadeUp .4s ease both;
+  }
+  .success-msg.show { display: flex; }
+  .success-check {
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .success-check svg { width: 11px; height: 11px; }
+
+  /* SOCIAL PROOF */
+  .hero-social {
+    margin-top: 64px;
+    display: flex; align-items: center; gap: 20px;
+    animation: fadeUp .6s .5s ease both;
+  }
+  .avatars { display: flex; }
+  .avatars span {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 500;
+    margin-left: -8px;
+  }
+  .avatars span:first-child { margin-left: 0; }
+  .av1 { background: #2d4a3e; color: #5DCAA5; }
+  .av2 { background: #3d2d4a; color: #AFA9EC; }
+  .av3 { background: #4a3d2d; color: #EF9F27; }
+  .av4 { background: #4a2d2d; color: #F0997B; }
+  .social-text { font-size: 13px; color: var(--text-muted); }
+  .social-text strong { color: var(--text-mid); font-weight: 500; }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-muted);
+    animation: fadeUp .6s .8s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--border), transparent);
+    animation: scrollLine 1.5s ease infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* HOW IT WORKS */
+  .section {
+    padding: 100px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 4vw, 44px);
+    letter-spacing: -1px;
+    line-height: 1.1;
+    margin-bottom: 60px;
+    max-width: 600px;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+  .step {
+    background: var(--bg2);
+    padding: 36px 32px;
+    position: relative;
+  }
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(232,255,90,0.12);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .step-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -.3px;
+  }
+  .step-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* FOR WHO */
+  .for-who {
+    padding: 100px 24px;
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .for-who-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .tags {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    margin-top: 32px;
+  }
+  .tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 10px 18px;
+    font-size: 14px;
+    color: var(--text-mid);
+    transition: border-color .2s, color .2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* FEATURES */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+  .feature {
+    background: var(--bg2);
+    padding: 32px;
+  }
+  .feature-icon {
+    width: 40px; height: 40px;
+    background: var(--accent-glow);
+    border: 1px solid rgba(232,255,90,0.2);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 16px;
+    font-size: 18px;
+  }
+  .feature-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .feature-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* FINAL CTA */
+  .final-cta {
+    padding: 120px 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta-glow {
+    position: absolute;
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(232,255,90,0.06) 0%, transparent 70%);
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .final-cta .hero-title { font-size: clamp(32px, 5vw, 64px); }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 40px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* DIVIDER */
+  .marquee-wrap {
+    padding: 28px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee {
+    display: inline-block;
+    animation: marquee 20s linear infinite;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  .marquee span { margin: 0 24px; }
+  .marquee .dot { color: var(--accent); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .steps { grid-template-columns: 1fr; }
+    .for-who-inner { grid-template-columns: 1fr; gap: 40px; }
+    .features { grid-template-columns: 1fr; }
+    .email-form { flex-direction: column; border-radius: 16px; padding: 12px; }
+    .email-form button { border-radius: 10px; text-align: center; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="logo">snoop<span>.</span></a>
+  <a href="#cta" class="nav-cta">Prova gratis</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    Accesso anticipato gratuito
+  </div>
+
+  <h1 class="hero-title">
+    Sappiamo già chi sarà<br>
+    il tuo <span class="accent">prossimo cliente.</span>
+  </h1>
+
+  <p class="hero-sub">
+    Snoop trova per te i business locali senza sito web o con una presenza online da aggiornare. Lista pronta, contatti inclusi.
+  </p>
+
+  <div id="form-wrap">
+    <form class="email-form" id="hero-form" onsubmit="submitForm(event, 'hero')">
+      <input type="email" placeholder="La tua email professionale" required id="hero-email">
+      <button type="submit">Voglio provarlo gratis →</button>
+    </form>
+    <p class="form-note">Nessuna carta di credito. Ti avvisiamo quando è pronto.</p>
+    <p class="form-note" style="margin-top:8px;"><label style="display:flex;align-items:center;gap:8px;justify-content:center;cursor:pointer;"><input type="checkbox" id="hero-consent" required style="accent-color:var(--accent);width:14px;height:14px;"><span>Ho letto e accetto la <a href="privacy.html" target="_blank" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a></span></label></p>
+  </div>
+
+  <div class="success-msg" id="hero-success">
+    <div class="success-check">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Perfetto! Ti avvisiamo subito quando Snoop è pronto.
+  </div>
+
+  <div class="hero-social">
+    <div class="avatars">
+      <span class="av1">MR</span>
+      <span class="av2">GL</span>
+      <span class="av3">AF</span>
+      <span class="av4">SP</span>
+    </div>
+    <p class="social-text">Già <strong>47 freelancer e agenzie</strong> in lista d'attesa</p>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>Trova lead</span><span class="dot">✦</span>
+    <span>Opportunity score</span><span class="dot">✦</span>
+    <span>Export CSV</span><span class="dot">✦</span>
+    <span>Email finder</span><span class="dot">✦</span>
+    <span>CRM integrato</span><span class="dot">✦</span>
+    <span>Business locali italiani</span><span class="dot">✦</span>
+    <span>Copertura tutta Italia</span><span class="dot">✦</span>
+    <span>Ricerca per città</span><span class="dot">✦</span>
+    <span>Trova lead</span><span class="dot">✦</span>
+    <span>Opportunity score</span><span class="dot">✦</span>
+    <span>Export CSV</span><span class="dot">✦</span>
+    <span>Email finder</span><span class="dot">✦</span>
+    <span>CRM integrato</span><span class="dot">✦</span>
+    <span>Business locali italiani</span><span class="dot">✦</span>
+    <span>Copertura tutta Italia</span><span class="dot">✦</span>
+    <span>Ricerca per città</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section">
+  <p class="section-label reveal">Come funziona</p>
+  <h2 class="section-title reveal">Semplice. Veloce. Tuo.</h2>
+
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Cerca per categoria e città</div>
+      <div class="step-desc">Digiti "ristoranti Milano" o "parrucchieri Napoli" — Snoop scansiona migliaia di attività locali in pochi secondi.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Snoop analizza la presenza online</div>
+      <div class="step-desc">Per ogni business controlla: ha un sito? È aggiornato? È mobile-friendly? Calcola un opportunity score da 0 a 100.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Ricevi la lista con i contatti</div>
+      <div class="step-desc">Nome, indirizzo, telefono, email trovata automaticamente, score. Esportabile in CSV o gestibile dal CRM integrato.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOR WHO -->
+<div class="for-who">
+  <div class="for-who-inner">
+    <div class="reveal">
+      <p class="section-label">Per chi è</p>
+      <h2 class="section-title" style="margin-bottom: 16px;">Migliaia di business locali cercano qualcuno come te.</h2>
+      <p style="color: var(--text-muted); font-size: 15px; line-height: 1.8;">
+        Snoop è costruito per freelancer e agenzie web che vogliono smettere di aspettare il passaparola e iniziare a trovare clienti in modo sistematico.
+      </p>
+      <div class="tags">
+        <span class="tag">Web designer</span>
+        <span class="tag">Sviluppatori freelance</span>
+        <span class="tag">Agenzie web</span>
+        <span class="tag">SEO specialist</span>
+        <span class="tag">Digital marketer</span>
+        <span class="tag">Consulenti digitali</span>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Opportunity score</div>
+          <div class="feature-desc">Ogni lead ha un punteggio 0–100 che indica quanto è "pronto" a comprare i tuoi servizi.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">✉</div>
+          <div class="feature-title">Email finder</div>
+          <div class="feature-desc">Snoop trova automaticamente l'email di contatto per ogni business nella tua lista.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">📋</div>
+          <div class="feature-title">Export CSV</div>
+          <div class="feature-desc">Scarica la tua lista in un click e importala nel CRM o tool che già usi.</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🗂</div>
+          <div class="feature-title">CRM leggero</div>
+          <div class="feature-desc">Gestisci i lead direttamente in Snoop: note, stati, pipeline. Senza integrazioni complesse.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+  <div class="final-cta-glow"></div>
+  <p class="section-label reveal">Accesso anticipato</p>
+  <h2 class="hero-title reveal" style="margin-bottom: 20px;">
+    Il tuo prossimo cliente<br>
+    <span class="accent">ti sta aspettando.</span>
+  </h2>
+  <p class="hero-sub reveal" style="margin: 0 auto 40px;">
+    Entra in lista d'attesa. Accesso gratuito per i primi iscritti.
+  </p>
+
+  <div id="cta-form-wrap" class="reveal">
+    <form class="email-form" id="cta-form" onsubmit="submitForm(event, 'cta')" style="margin: 0 auto;">
+      <input type="email" placeholder="La tua email" required id="cta-email">
+      <button type="submit">Voglio provarlo gratis →</button>
+    </form>
+    <p class="form-note">Gratis per sempre per i primi 100 iscritti.</p>
+    <p class="form-note" style="margin-top:8px;"><label style="display:flex;align-items:center;gap:8px;justify-content:center;cursor:pointer;"><input type="checkbox" id="cta-consent" required style="accent-color:var(--accent);width:14px;height:14px;"><span>Ho letto e accetto la <a href="privacy.html" target="_blank" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a></span></label></p>
+  </div>
+
+  <div class="success-msg" id="cta-success" style="justify-content: center; margin: 0 auto;">
+    <div class="success-check">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#0a0a0a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    Sei dentro! Ti avvisiamo appena Snoop è disponibile.
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo" style="font-size: 16px;">snoop<span style="color: var(--accent)">.</span></span>
+  <span>© 2026 Snoop — Tutti i diritti riservati</span>
+  <span>Made in Italy 🇮🇹</span>
+</footer>
+
+<script>
+  // Nav scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Form submit
+  function submitForm(e, id) {
+    e.preventDefault();
+    const email = document.getElementById(id + '-email').value;
+    const wrap = document.getElementById(id === 'hero' ? 'form-wrap' : 'cta-form-wrap');
+    const success = document.getElementById(id + '-success');
+
+    // Qui in produzione: fetch('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) })
+    console.log('Email raccolta:', email);
+
+    wrap.style.display = 'none';
+    success.classList.add('show');
+
+    // Sync entrambi i form se uno viene compilato
+    if (id === 'hero') {
+      document.getElementById('cta-email').value = email;
+    } else {
+      document.getElementById('hero-email').value = email;
+    }
+  }
+</script>
+</body>
+</html>
