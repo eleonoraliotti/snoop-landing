@@ -648,11 +648,6 @@
   // Form submit
   function submitForm(e, id) {
     e.preventDefault();
-    const consent = document.getElementById(id + '-consent');
-    if (!consent.checked) {
-      consent.style.outline = '2px solid var(--accent)';
-      return;
-    }
     const email = document.getElementById(id + '-email').value;
     const wrap = document.getElementById(id === 'hero' ? 'form-wrap' : 'cta-form-wrap');
     const success = document.getElementById(id + '-success');
