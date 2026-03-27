@@ -469,17 +469,15 @@
     Snoop trova per te i business locali senza sito web o con una presenza online da aggiornare. Lista pronta, contatti inclusi.
   </p>
 
-<div id="form-wrap">
+  <div id="form-wrap">
     <form class="email-form" id="hero-form" onsubmit="submitForm(event, 'hero')">
       <input type="email" placeholder="La tua email" required id="hero-email">
       <button type="submit">Voglio provarlo gratis →</button>
     </form>
     <p class="form-note">Nessuna carta di credito. Ti avvisiamo quando è pronto.</p>
     <p class="form-note" style="margin-top:8px;"><label style="display:flex;align-items:center;gap:8px;justify-content:center;cursor:pointer;"><input type="checkbox" id="hero-consent" required style="accent-color:var(--accent);width:14px;height:14px;"><span>Ho letto e accetto la <a href="privacy.html" target="_blank" style="color:var(--accent);text-decoration:underline;">Privacy Policy</a></span></label></p>
-
+   
   </div>
-
-
 
   <div class="success-msg" id="hero-success">
     <div class="success-check">
@@ -650,40 +648,22 @@
   // Form submit
   function submitForm(e, id) {
     e.preventDefault();
-    const consent = document.getElementById(id + '-consent');
-    if (!consent.checked) {
-      consent.style.outline = '2px solid var(--accent)';
-      return;
-    }
     const email = document.getElementById(id + '-email').value;
-    
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://38f65849.sibforms.com/serve/MUIFAMtOCH3aOw-p8qqvurbOZt3I4gnygxMUFVB2U-Lvq4C7QxRrhQq1n2dL3AXw16XCFiruhc036UIacvc5q25PMFs3nO2Z8wU2jshjUYjSKA1P5v9xm9B2urugwPOAiF56ObSagUNzMljNaBvkBmwFnBmAcVGDcRyPDMPjnZ17HIg3ll-CgWHwEgpWya4Zeh48LPZ-ABL53vXaJA==';
-    
-    const emailInput = document.createElement('input');
-    emailInput.type = 'hidden';
-    emailInput.name = 'EMAIL';
-    emailInput.value = email;
-    form.appendChild(emailInput);
-    
-    const checkInput = document.createElement('input');
-    checkInput.type = 'hidden';
-    checkInput.name = 'email_address_check';
-    checkInput.value = '';
-    form.appendChild(checkInput);
-    
-    const localeInput = document.createElement('input');
-    localeInput.type = 'hidden';
-    localeInput.name = 'locale';
-    localeInput.value = 'it';
-    form.appendChild(localeInput);
+    const wrap = document.getElementById(id === 'hero' ? 'form-wrap' : 'cta-form-wrap');
+    const success = document.getElementById(id + '-success');
 
-    document.body.appendChild(form);
-    form.submit();
-  }
     // Qui in produzione: fetch('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) })
-  
+    console.log('Email raccolta:', email);
+
+    wrap.style.display = 'none';
+    success.classList.add('show');
+
+    // Sync entrambi i form se uno viene compilato
+    if (id === 'hero') {
+      document.getElementById('cta-email').value = email;
+    } else {
+      document.getElementById('hero-email').value = email;
+    }
   }
 </script>
 </body>
