@@ -648,10 +648,30 @@
   // Form submit
   function submitForm(e, id) {
     e.preventDefault();
+    const consent = document.getElementById(id + '-consent');
+    if (!consent.checked) {
+      consent.style.outline = '2px solid var(--accent)';
+      return;
+    }
     const email = document.getElementById(id + '-email').value;
     const wrap = document.getElementById(id === 'hero' ? 'form-wrap' : 'cta-form-wrap');
     const success = document.getElementById(id + '-success');
 
+    fetch('https://38f65849.sibforms.com/serve/MUIFAMtOCH3aOw-p8qqvurbOZt3I4gnygxMUFVB2U-Lvq4C7QxRrhQq1n2dL3AXw16XCFiruhc036UIacvc5q25PMFs3nO2Z8wU2jshjUYjSKA1P5v9xm9B2urugwPOAiF56ObSagUNzMljNaBvkBmwFnBmAcVGDcRyPDMPjnZ17HIg3ll-CgWHwEgpWya4Zeh48LPZ-ABL53vXaJA==', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `EMAIL=${encodeURIComponent(email)}&email_address_check=&locale=it&html_type=simple`
+    });
+
+    wrap.style.display = 'none';
+    success.classList.add('show');
+
+    if (id === 'hero') {
+      document.getElementById('cta-email').value = email;
+    } else {
+      document.getElementById('hero-email').value = email;
+    }
+  }
     // Qui in produzione: fetch('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) })
     console.log('Email raccolta:', email);
 
