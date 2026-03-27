@@ -675,17 +675,7 @@
     }
   }
     // Qui in produzione: fetch('/api/waitlist', { method: 'POST', body: JSON.stringify({ email }) })
-    console.log('Email raccolta:', email);
-
-    wrap.style.display = 'none';
-    success.classList.add('show');
-
-    // Sync entrambi i form se uno viene compilato
-    if (id === 'hero') {
-      document.getElementById('cta-email').value = email;
-    } else {
-      document.getElementById('hero-email').value = email;
-    }
+  
   }
 </script>
 </body>
